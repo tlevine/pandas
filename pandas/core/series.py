@@ -509,6 +509,7 @@ class Series(pa.Array, generic.PandasObject):
             input data
         copy : boolean, default False
         """
+        self.meta = {}
         pass
 
     @property
@@ -539,7 +540,7 @@ class Series(pa.Array, generic.PandasObject):
     def __reduce__(self):
         """Necessary for making this object picklable"""
         object_state = list(ndarray.__reduce__(self))
-        subclass_state = (self.index, self.name)
+        subclass_state = (self.index, dict(name=self.name,meta=self.meta))
         object_state[2] = (object_state[2], subclass_state)
         return tuple(object_state)
 
@@ -547,6 +548,16 @@ class Series(pa.Array, generic.PandasObject):
         """Necessary for making this object picklable"""
         nd_state, own_state = state
         ndarray.__setstate__(self, nd_state)
+
+        if len(own_state)>1 and isinstance(own_state[1],dict):
+            kvs = own_state[1]
+            for k,v in enumerate(kvs):
+                setattr(self,k,v)
+            # and put things back they the previous pickle
+            # schema worked
+            own_state[1] = kvs.get('name')
+
+        index, dict_or_name = own_state[0], None
 
         # backwards compat
         index, name = own_state[0], None
