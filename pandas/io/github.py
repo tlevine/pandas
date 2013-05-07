@@ -27,11 +27,19 @@ def _flatten_issue(issue):
     }
 
 
-def issues(owner, repo):
-#              label = None, not_label = None,
-#              has_milestone = None, not_milestone = None):
+def issues(owner, repo,
+           milestone = '*', state = 'open', assignee = '*',
+           creator = None, mentioned = None, labels = []):
+
     url = u'https://api.github.com/repos/%s/%s/issues' % (owner, repo)
-    params = {u'state': 'closed'}
+    params = {
+        u'milestone': milestone,
+        u'state': state,
+        u'assignee': assignee,
+    }
+    if len(labels) > 0:
+        params[u'labels'] = u','.join(labels)
+
     r = requests.get(url, params = params)
     issues = json.loads(r.text)
     return DataFrame([_flatten_issue(issue) for issue in issues])
