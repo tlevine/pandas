@@ -27,11 +27,10 @@ def _flatten_issue(issue):
     }
 
 
-def issues(owner, repo,
-           milestone = '*', state = 'open', assignee = '*',
-           creator = None, mentioned = None, labels = []):
+def issues(owner, repo, milestone = '*', state = 'open', assignee = '*', labels = []):
 
     url = u'https://api.github.com/repos/%s/%s/issues' % (owner, repo)
+
     params = {
         u'milestone': milestone,
         u'state': state,
