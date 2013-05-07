@@ -28,13 +28,33 @@ def _flatten_issue(issue):
 
 
 def issues(owner, repo, milestone = '*', state = 'open', assignee = '*', labels = []):
+    '''
+    owner: str/unicode
+        The owner' name
+
+    repo: str/unicode
+        The repository name
+
+    milestone: str/unicode
+        String User login
+        none for Issues with no assigned User.
+        * for Issues with any assigned User.
+
+    state: "open" or "closed"
+
+    labels: list of str/unicode
+        If this is not empty, return only the accordingly labeled repositories.
+
+    The paramaters come mostly from here.
+    http://developer.github.com/v3/issues/#list-issues-for-a-repository
+    '''
 
     url = u'https://api.github.com/repos/%s/%s/issues' % (owner, repo)
 
     params = {
-        u'milestone': milestone,
+#       u'milestone': milestone,
         u'state': state,
-        u'assignee': assignee,
+#       u'assignee': assignee,
     }
     if len(labels) > 0:
         params[u'labels'] = u','.join(labels)

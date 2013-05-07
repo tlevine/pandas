@@ -22,5 +22,5 @@ def test_issues():
          u'updated_at': {0: u'2012-03-21T04:53:08Z'},
          u'url': {0: u'https://api.github.com/repos/pydata/pydata2012/issues/1'},
          u'user': {0: u'stefanv'}}
-    observed = issues('pydata', 'pydata2012')
+    observed = issues('pydata', 'pydata2012', state = 'closed')
     assert_frame_equal(observed, pandas.DataFrame(expected))
