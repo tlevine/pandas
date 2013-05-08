@@ -33,5 +33,9 @@ def issues(owner, repo):
     url = u'https://api.github.com/repos/%s/%s/issues' % (owner, repo)
     params = {u'state': 'closed'}
     r = requests.get(url, params = params)
+
+    if r.status_code != 200:
+        raise Exception('%d\n%s' % (r.status_code, r.text))
+
     issues = json.loads(r.text)
     return DataFrame([_flatten_issue(issue) for issue in issues])

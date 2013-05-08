@@ -9,6 +9,11 @@ from pandas.io.github import issues
 
 @slow
 @network
+def test_non_repository():
+    nose.tools.assert_raises(Exception, lambda: issues('pydata', 'llamas'))
+
+@slow
+@network
 def test_issues():
     expected = {u'assignee': {0: None},
          u'body': {0: u''},
