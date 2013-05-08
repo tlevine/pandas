@@ -28,8 +28,6 @@ def _flatten_issue(issue):
 
 
 def issues(owner, repo):
-#              label = None, not_label = None,
-#              has_milestone = None, not_milestone = None):
     url = u'https://api.github.com/repos/%s/%s/issues' % (owner, repo)
     params = {u'state': 'closed'}
     r = requests.get(url, params = params)
