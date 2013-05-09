@@ -27,7 +27,6 @@ def _flatten_issue(issue):
     }
 
 
-
 def issues(owner, repo, state = u'open', labels = []):
     '''
     owner: str/unicode
@@ -53,7 +52,7 @@ def issues(owner, repo, state = u'open', labels = []):
 
     r = requests.get(url, params = params)
     if r.status_code != 200:
-        raise Exception('%s error:\n%s' % (r.status_code, r.text))
+        raise Exception('%d\n%s' % (r.status_code, r.text))
 
     issues = json.loads(r.text)
     return DataFrame([_flatten_issue(issue) for issue in issues])
