@@ -27,7 +27,8 @@ def _flatten_issue(issue):
     }
 
 
-def issues(owner, repo, milestone = '*', state = 'open', assignee = '*', labels = []):
+
+def issues(owner, repo, state = u'open', labels = []):
     '''
     owner: str/unicode
         The owner' name
@@ -35,30 +36,24 @@ def issues(owner, repo, milestone = '*', state = 'open', assignee = '*', labels 
     repo: str/unicode
         The repository name
 
-    milestone: str/unicode
-        String User login
-        none for Issues with no assigned User.
-        * for Issues with any assigned User.
-
     state: "open" or "closed"
+        Return the open issues or the closed ones?
 
     labels: list of str/unicode
         If this is not empty, return only the accordingly labeled repositories.
 
-    The paramaters come mostly from here.
+    Read more here.
     http://developer.github.com/v3/issues/#list-issues-for-a-repository
     '''
 
     url = u'https://api.github.com/repos/%s/%s/issues' % (owner, repo)
-
-    params = {
-#       u'milestone': milestone,
-        u'state': state,
-#       u'assignee': assignee,
-    }
+    params = {u'state': state}
     if len(labels) > 0:
         params[u'labels'] = u','.join(labels)
 
     r = requests.get(url, params = params)
+    if r.status_code != 200:
+        raise Exception('%s error:\n%s' % (r.status_code, r.text))
+
     issues = json.loads(r.text)
     return DataFrame([_flatten_issue(issue) for issue in issues])
